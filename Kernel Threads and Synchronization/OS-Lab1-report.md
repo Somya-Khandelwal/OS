@@ -1,335 +1,450 @@
-Name: Somya Khandelwal
-
-Roll Number: 200123056
-
-Group: M24
-
-Assignment 0 - CS344
-
-
-### Exercise 1: Inline Assembly
-
-Refer to file ex1.c
-
-The following inline assembly code will increment the value of x by 1.
-
-```c
-asm ("incl %0":"+r"(x));
-```
-- `incl` instruction increments the operand by 1.
-- `+r` is used to allocate any free register to the variable x and use that register as both Input and Output
-- `%0` corresponds to the register allocated to x.
-
----
-
-<div style="page-break-after: always;"></div>
-
-### Exercise 2: GDB 
-
-A few starting instructions of `BIOS` are:
-
-```assembly
-0xffff0:   ljmp   $0x3630,$0xf000e05b
-0xfe05b:   cmpw   $0xffc8,%cs:(%esi)
-0xfe060:   jo     0xfe062
-0xfe062:   jne    0xd241d416
-0xfe068:   mov    %edx,%ss
-0xfe06a:   mov    $0x7000,%sp
-0xfe06e:   add    %al,(%eax)
-0xfe070:   mov    $0x2d4e,%dx
-0xfe074:   verw   %cx
-0xfe077:   xchg   %ebx,(%esi)
-0xfe079:   push   %bp
-0xfe07b:   push   %di
-0xfe07d:   push   %si
-0xfe07f:   push   %bx
-0xfe081:   sub    $0x70,%sp
-0xfe085:   mov    %ax,%di
-0xfe088:   mov    0x4(%bx,%si),%si
-0xfe08d:   mov    %cs:0x2c(%bp),%bl
-0xfe093:   icebp  
-0xfe094:   ljmp   *(%esi)
-0xfe096:   mov    0x2d(%bp),%al
-0xfe09b:   icebp 
-```
-
-The `BIOS` first initializes all the PCI bus and all other peripheral devices. Then it loads the `bootloader` from the `hardisk `into memory. Finally with a jump statement control goes to the `bootloader`. 
-
----
-
-<div style="page-break-after: always;"></div>
-
-### Exercise 3: Loading Kernel from Bootloader
-
-**Trace**: Refer to file [Bootloader Trace.pdf](Bootloader Trace.pdf)
-
-**(a)**  Following instructions change the addressing to 32 bit protected mode.
-
-```assembly
-0x7c1d: lgdt   gdtdesc 											# lgdt (%esi)
-0x7c22: mov    %cr0,%eax
-0x7c25: or     $0x1,%ax
-0x7c29: mov    %eax,%cr0
-0x7c2c: ljmp   $(SEG_KCODE<<3), $start32    # ljmp $0xb866,$0x87c31
-```
-
-After this point processor starts executing 32 bit code. First instructions it executes in 32 bit is:-
-
-```assembly
-0x7c31: mov    $0x10,%ax
-```
-
-**(b)**  The last instruction that bootloader executed is
-
-```assembly
-0x7d87:	call   *0x10018
-```
-
-This instructions is calling the entry function found in ELF Header. In `bootmain.c` this corresponds to following lines.
-
-```C
-entry = (void(*)(void))(elf->entry);
-entry();
-```
-
-First instruction of kernel is
-
-```assembly
-0x10000c:	mov    %cr4,%eax
-```
-
-**(c)** This information is stored in elf header. First the bootloader loads first 4096 bytes (1st page) into memory. This page contains elf header which has an array of program headers. these program headers contains the size and offset of different segments of kernel which are then loaded into memory.
-
-```c
-// Load each program segment (ignores ph flags).
-ph = (struct proghdr*)((uchar*)elf + elf->phoff);
-eph = ph + elf->phnum;
-for(; ph < eph; ph++){
-  pa = (uchar*)ph->paddr;
-  readseg(pa, ph->filesz, ph->off);
-  if(ph->memsz > ph->filesz)
-    stosb(pa + ph->filesz, 0, ph->memsz - ph->filesz);
-}
-```
-
----
-<div style="page-break-after: always;"></div>
-
-### Exercise 4: Objdump
-
-> ![objdump kernel](https://i.ibb.co/TWk7yDT/Screenshot-2022-08-12-113606.png) 
-> ![objdump_bootblock.png](https://i.ibb.co/FVRSb4r/Screenshot-2022-08-12-114115.png) 
-
-<div style="page-break-after: always;"></div>
-
-`objdump -h` &nbsp; displays the header of an executable file. In this case it displays the contents of program section headers of the ELF Binaries.
-
-The important program sections in an ELF Binary - 
-- `.text` - All the executable instructions of the program
-- `.rodata` - The read-only data of the program like the ASCII string constants in C.
-- `.data` - The initialized global and static variables in the program.
-- `.bss` - The uninitialized global and static variables in the program.
-
-Each section has the following information -
-- `LMA(Load memory address)` - The address at which the section is actually loaded in the memory.
-- `VMA(Virtual memory address)` - The address at which the binary assumes the section will be loaded.
-- `Size` - The size of the section.
-- `Offset` - The offset from the beginning of the harddrive where the section is located at.
-- `Algn` - The value to which the section is aligned in memory and in the file.
-- `CONTENTS, ALLOC, LOAD, READONLY, DATA, CODE` - Flags which gives additional information regarding the section. Eg. Is it READONLY, should it be LOADED etc. 
-
-
----
-
-<div style="page-break-after: always;"></div>
-
-### Exercise 5: Bootloader's Link address
-
-If we get wrong `bootloader's` link address, then the 1st instruction that would break is
-
-```assembly
-ljmp  $(SEG_KCODE<<3), $start32
-```
-
-With correct  `bootloader's` link address the output was:
-
-```assembly
-[   0:7c2c] => 0x7c2c:	ljmp   $0xb866,$0x87c31
-The target architecture is assumed to be i386
-=> 0x7c31:	mov    $0x10,%ax
-=> 0x7c35:	mov    %eax,%ds
-=> 0x7c37:	mov    %eax,%es
-```
-
-The output when `bootloader's` link address is changed to 0x7C04:
-
-```assembly
-[   0:7c2c] => 0x7c2c:	ljmp   $0xb866,$0x87c35 
-[f000:e05b]    0xfe05b:	cmpw   $0xffc8,%cs:(%esi)
-[f000:e062]    0xfe062:	jne    0xd241d416
-[f000:d414]    0xfd414:	cli    
+##PART A
 
 ```
+int thread_create(void (_fcn)(void _), void *arg, void *stack)
+{
+int i, pid;
+struct proc *np;
+struct proc *curproc = myproc();
 
-The `ljmp` instruction breaks because in the `BIOS` the address 0x7C00 is hard coded, so `BIOS` always loads `bootloader` starting from 0x7C00. But the `linker` converts the code into binary form and assigns addresses in place of labels taking `bootloader's `link address(0x7C04) as the starting address of the `bootloader` in the memory. So the address of the label `$start32` in the `ljmp` instruction doesn't contain the correct instruction and this causes some error. Hence the `BIOS` restarts (execution reaches starting instruction of `BIOS`). This process then repeats and in turn leads to an infinite loop.  
-
-The file headers of `kernel` are
-
-```
-kernel:     file format elf32-i386
-architecture: i386, flags 0x00000112:
-EXEC_P, HAS_SYMS, D_PAGED
-start address 0x0010000c
-```
-
-This shows that entry point of `kernel` is 0x0010000c.
-
----
-
-<div style="page-break-after: always;"></div>
-
-### Exercise 6: Inspecting Kernel Loading
-
-After entering the bootloader (at `0x7c00`):
-```
-(gdb) x/8x 0x00100000
-0x100000:	0x00000000	0x00000000	0x00000000	0x00000000
-0x100010:	0x00000000	0x00000000	0x00000000	0x00000000
-```
-After entering the kernel (at `0x10000c`):
-```
-(gdb) x/8x 0x00100000
-0x100000:	0x1badb002	0x00000000	0xe4524ffe	0x83e0200f
-0x100010:	0x220f10c8	0x9000b8e0	0x220f0010	0xc0200fd8
-```
-The code for kernel is stored from memory location `0x00100000`, which is loaded from the disk by the bootloader.
-
-At the point the BIOS enters the bootloader, this loading is not done, hence the main memory does not contain the kernel code. Moreover, it is filled with zeroes because upto this point the system runs in the 20-bit real mode and any memory location from this address onwards is not touched. 
-
-At the point the bootloader enters the kernel, the bootloader has already loaded the kernel and there are instructions from that memory location.
-
-The second breakpoint is the entry point of the kernel. The first intructions starting from this location are responsible for turning on paging (which wasn't enabled upto this point).
-
----
-<div style="page-break-after: always;"></div>
-
-### Exercise 7: Adding System Call
-
-For creating a system call, we need to change 6 files:- [user.h](System Call/user.h),  [syscall.h](System Call/syscall.h), [syscall.c](System Call/syscall.c), [usys.S](System Call/usys.S), [defs.h](System Call/defs.h), [sysproc.c](System Call/sysproc.c)
-
-```C
-// user.h 
-int draw(void* buf, uint size);           // line 26
-```
-
-```C
-// syscall.h 
-#define SYS_draw 22                       // line 23
-```
-
-```C
-// syscall.c
-extern int sys_draw(void);                // line 106
-[SYS_draw]  sys_draw,                   // line 130
-```
-
-```C
-// usys.S 
-SYSCALL(draw)                             // line 32
-```
-
-```C
-// defs.h 
-int draw(void*, uint);                    // line 123
-```
-
-```C
-// sysproc.c
-int sys_draw(){                           // line 94
-	char* buf;
-	uint size;
-	if(argptr(0, (void*)&buf, sizeof(buf)) < 0) return -1;
-	if(argptr(0, (void*)&size, sizeof(size)) < 0) return -1;
-	
-	static char turt[] = \
-"                         \n"
-"       /^\\  \n"
-"      |   |			\n"
-"/\\     |_|     /\\		\n"
-"| \\___/' `\\___/ |	\n"
-" \\_/  \\___/  \\_/	\n"
-"  |\\__/   \\__/|	\n"
-"  |/  \\___/  \\|	\n"
-" ./\\__/   \\__/\\,	\n"
-" | /  \\___/  \\ |	\n"
-" \\/     V     \\/   \n"
-"                          \n";
-    					  
-    static uint turt_len = sizeof(turt);
-    if(size < turt_len) return -1;
-    
-    int i = 0;
-    while(turt[i] != '\0'){
-     	buf[i] = turt[i];
-    	++i;
+    // Allocate process.
+    if ((np = allocproc()) == 0)
+    {
+        return -1;
     }
-    buf[i] = '\0';
-    
-    return turt_len;
+
+    np->sz = curproc->sz;
+    np->parent = curproc;
+
+    np->pgdir = curproc->pgdir;
+    *np->tf = *curproc->tf;
+    // *np->context = *curproc->context;   // Saving in context is giving error
+    np->tf->eax = 0;
+    np->tf->eip = (uint)fcn;
+    // np->stack = (uint)stack;
+    np->tf->esp = (uint)stack + 4092;
+    *((uint *)(np->tf->esp)) = (uint)arg;
+    *((uint *)(np->tf->esp - 4)) = 0xFFFFFFFF;
+    np->tf->esp -= 4;
+
+    for (i = 0; i < NOFILE; i++)
+        if (curproc->ofile[i])
+            np->ofile[i] = filedup(curproc->ofile[i]);
+    np->cwd = idup(curproc->cwd);
+
+    safestrcpy(np->name, curproc->name, sizeof(curproc->name));
+
+    pid = np->pid;
+
+    acquire(&ptable.lock);
+
+    np->state = RUNNABLE;
+    release(&ptable.lock);
+    return pid;
+
 }
 ```
----
 
-<div style="page-break-after: always;"></div>
+```
+int thread_join(void)
+{
 
-### Exercise 8: User Level Application
+    struct proc *p;
+    int havekids, pid;
+    struct proc *curproc = myproc();
 
-We created [drawtest.c](System Call/drawtest.c) in which we created a buffer and used system call to fill that buffer with turt ASCII image. Then we printed this buffer to console using `printf`. 1st parameter in `printf` is file descriptor which is 1 for console out. At the end we used `exit` system call to exit from this program.
+    acquire(&ptable.lock);
 
-```C
-// drawtest.c
+    while (1)
+    {
+        havekids = 0;
+        for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+        {
+            if (p->parent != curproc)
+                continue;
+            havekids = 1;
+            if (p->state == ZOMBIE)
+            {
+                pid = p->pid;
+                kfree(p->kstack);
+                p->kstack = 0;
+                p->state = UNUSED;
+                p->pid = 0;
+                p->parent = 0;
+                p->name[0] = 0;
+                p->killed = 0;
+                release(&ptable.lock);
+                return pid;
+            }
+        }
+
+        if (!havekids || curproc->killed)
+        {
+            release(&ptable.lock);
+            return -1;
+        }
+        sleep(curproc, &ptable.lock);
+    }
+
+}
+```
+
+```
+
+int thread_exit(void)
+{
+
+    struct proc *p;
+    struct proc *curproc = myproc();
+    int fd;
+
+    if (curproc == initproc)
+        panic("init exiting");
+
+    for (fd = 0; fd < NOFILE; fd++)
+    {
+        if (curproc->ofile[fd])
+        {
+            fileclose(curproc->ofile[fd]);
+            curproc->ofile[fd] = 0;
+        }
+    }
+
+    begin_op();
+    iput(curproc->cwd);
+    end_op();
+    curproc->cwd = 0;
+
+    acquire(&ptable.lock);
+
+    // Parent might be sleeping in wait().
+    wakeup1(curproc->parent);
+
+    // Pass abandoned children to init.
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+        if (p->parent == curproc)
+        {
+            p->parent = initproc;
+            if (p->state == ZOMBIE)
+                wakeup1(initproc);
+        }
+    }
+
+    // Jump into the scheduler, never to return.
+    curproc->state = ZOMBIE;
+    sched();
+    panic("zombie exit");
+
+}
+```
+
+### thread_test
+
+```
 #include "types.h"
+#include "stat.h"
 #include "user.h"
 
-int main(int argc, char *argv[]){
-	printf(1, "I am a turt.\n\n");
-	char turt[500];
-	draw(turt, 500);
-	printf(1, turt);
-	exit();
+struct balance
+{
+    char name[32];
+    int amount;
+};
+
+volatile int total_balance = 0;
+volatile unsigned int delay(unsigned int d)
+{
+    unsigned int i;
+    for (i = 0; i < d; i++)
+    {
+        __asm volatile("nop" ::
+                           :);
+    }
+    return i;
+}
+
+void do_work(void *arg)
+{
+    int i;
+    int old;
+    struct balance *b = (struct balance *)arg;
+    printf(1, "Starting do_work: s:%s\n", b->name);
+    for (i = 0; i < b->amount; i++)
+    {
+        // thread_spin_lock(&lock);
+        old = total_balance;
+        delay(100000);
+        total_balance = old + 1;
+        // thread_spin_unlock(&lock);
+    }
+    printf(1, "Done s:%s\n", b->name);
+    thread_exit();
+    return;
+}
+
+int main(int argc, char *argv[])
+{
+    struct balance b1 = {"b1", 3200};
+    struct balance b2 = {"b2", 2800};
+    void *s1, *s2;
+    int t1, t2, r1, r2;
+    s1 = malloc(4096);
+    s2 = malloc(4096);
+    t1 = thread_create(do_work, (void *)&b1, s1);
+    t2 = thread_create(do_work, (void *)&b2, s2);
+    r1 = thread_join();
+    r2 = thread_join();
+    printf(1, "Threads finished: (%d):%d, (%d):%d, shared balance:%d\n",
+           t1, r1, t2, r2, total_balance);
+    exit();
 }
 ```
 
-In [Makefile](System Call/Makefile) we need to add `_drawtest\` to `UPROGS` and `drawtest.c` to `XTRA	`.
+### system_calls
 
-```makefile
-// Makefile
-UPROGS=\
-	_cat\
-	_echo\
-	_forktest\
-	_grep\
-	_init\
-	_kill\
-	_ln\
-	_ls\
-	_mkdir\
-	_rm\
-	_sh\
-	_stressfs\
-	_usertests\
-	_wc\
-	_zombie\
-	_drawtest\                                                               # line 184
-	
-XTRA=\
-	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
-	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c drawtest.c\  # line 251
-	
+####
+
+## PART B
+
+### proc.c system_calls
+
+```
+void thread_spinlock_init(struct spinlock *lk)
+{
+    initlock(lk, "tlock");
+}
+```
+
+```
+void thread_spin_lock(struct spinlock *lk)
+{
+
+    // while(holding(lk));
+    // lk->locked = 1;
+
+    // Using the above commented code was resulting in problems
+    // due to lack of atomicity
+    // This resulted in very long busy waits
+
+    // acquire(lk);
+
+    // Ask the reason why acquire and release is not working
+
+    while (xchg(&lk->locked, 1))
+        ;
+
+    // xchg is atomic and executes lock operation completely
+    // before context swit
+
+}
+```
 
 ```
 
-> **Output**
+void thread_spin_unlock(struct spinlock *lk)
+{
+    // lk->locked = 0;
 
+    // release(lk);
 
-> ![](https://i.ibb.co/Dzp5Hb0/Whats-App-Image-2022-08-11-at-11-48-59-PM.jpg)
+    asm volatile("movl $0, %0"
+                 : "+m"(lk->locked)
+                 :);
+
+}
+```
+
+### thread_test_spinlock
+
+```
+#include "types.h"
+#include "stat.h"
+#include "user.h"
+#include "spinlock.h"
+
+struct balance
+{
+    char name[32];
+    int amount;
+};
+
+struct spinlock lock;
+struct spinlock lock2;
+
+volatile int total_balance = 0;
+volatile unsigned int delay(unsigned int d)
+{
+    unsigned int i;
+    for (i = 0; i < d; i++)
+    {
+        __asm volatile("nop" ::
+                           :);
+    }
+    return i;
+}
+
+void do_work(void *arg)
+{
+    int i;
+    int old;
+    struct balance *b = (struct balance *)arg;
+
+    thread_spin_lock(&lock2);
+    printf(1, "Starting do_work: %s\n", b->name);
+    thread_spin_unlock(&lock2);
+
+    for (i = 0; i < b->amount; i++)
+    {
+        thread_spin_lock(&lock);
+        old = total_balance;
+        delay(100000);
+        total_balance = old + 1;
+        thread_spin_unlock(&lock);
+    }
+
+    thread_spin_lock(&lock2);
+    printf(1, "Done: %s\n", b->name);
+    thread_spin_unlock(&lock2);
+
+    thread_exit();
+    return;
+}
+
+int main(int argc, char *argv[])
+{
+
+    thread_spinlock_init(&lock);
+    thread_spinlock_init(&lock2);
+    struct balance b1 = {"b1", 3200};
+    struct balance b2 = {"b2", 2800};
+    void *s1, *s2;
+    int t1, t2, r1, r2;
+    s1 = malloc(4096);
+    s2 = malloc(4096);
+    t1 = thread_create(do_work, (void *)&b1, s1);
+    t2 = thread_create(do_work, (void *)&b2, s2);
+    r1 = thread_join();
+    r2 = thread_join();
+    printf(1, "Threads finished: (%d):%d, (%d):%d, shared balance:%d\n",
+           t1, r1, t2, r2, total_balance);
+    exit();
+}
+```
+
+## PART C
+
+### mutex.h
+
+```
+#include "types.h"
+
+struct mutexlock{
+    uint locked;
+    char* name;
+};
+```
+
+### mutex.c
+
+```
+#include "types.h"
+#include "user.h"
+#include "x86.h"
+
+void thread_mutex_init(struct mutexlock *lk, char *name)
+{
+    lk->locked = 0;
+    lk->name = name;
+}
+
+void thread_mutex_lock(struct mutexlock *lk)
+{
+    while (xchg(&lk->locked, 1))
+    {
+        sleep(1);
+    }
+}
+
+void thread_mutex_unlock(struct mutexlock *lk)
+{
+    asm volatile("movl $0, %0"
+                 : "+m"(lk->locked)
+                 :);
+}
+```
+
+### thread_test_mutex
+
+```
+#include "types.h"
+#include "stat.h"
+#include "user.h"
+#include "mutex.h"
+#include "mutex.c"
+
+struct balance
+{
+    char name[32];
+    int amount;
+};
+
+struct mutexlock lock;
+struct mutexlock lock2;
+
+volatile int total_balance = 0;
+volatile unsigned int delay(unsigned int d)
+{
+    unsigned int i;
+    for (i = 0; i < d; i++)
+    {
+        __asm volatile("nop" ::
+                           :);
+    }
+    return i;
+}
+
+void do_work(void *arg)
+{
+    int i;
+    int old;
+    struct balance *b = (struct balance *)arg;
+
+    thread_mutex_lock(&lock2);
+    printf(1, "Starting do_work: s:%s\n", b->name);
+    thread_mutex_unlock(&lock2);
+
+    for (i = 0; i < b->amount; i++)
+    {
+        thread_mutex_lock(&lock);
+        old = total_balance;
+        delay(100000);
+        total_balance = old + 1;
+        thread_mutex_unlock(&lock);
+    }
+
+    thread_mutex_lock(&lock2);
+    printf(1, "Done s:%s\n", b->name);
+    thread_mutex_unlock(&lock2);
+
+    thread_exit();
+    return;
+}
+
+int main(int argc, char *argv[])
+{
+    struct balance b1 = {"b1", 3200};
+    struct balance b2 = {"b2", 2800};
+    void *s1, *s2;
+    int t1, t2, r1, r2;
+    s1 = malloc(4096);
+    s2 = malloc(4096);
+    t1 = thread_create(do_work, (void *)&b1, s1);
+    t2 = thread_create(do_work, (void *)&b2, s2);
+    r1 = thread_join();
+    r2 = thread_join();
+    printf(1, "Threads finished: (%d):%d, (%d):%d, shared balance:%d\n",
+           t1, r1, t2, r2, total_balance);
+    exit();
+}
+```
