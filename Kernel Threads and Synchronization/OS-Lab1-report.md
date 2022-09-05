@@ -1,9 +1,12 @@
+# ASSIGNMENT 1
+# 
+
 ## Part 1: Kernel threads
 
 **thread_create**
 
-
 This creates a new process as a copy of the current process, but we can distinguish it as a thread by the parent property of "proc" which will store the parent of the thread and also the threads will share the same Page Directory with their parents.
+
 ```
 int thread_create(void (_fcn)(void _), void *arg, void *stack)
 {
@@ -52,6 +55,7 @@ struct proc *curproc = myproc();
 Thread Join blocks the execution of parent thread until the child thread has completed it's execution
 
 **thread_join**
+
 ```
 int thread_join(void)
 {
@@ -95,9 +99,11 @@ int thread_join(void)
 
 }
 ```
+
 **thread_exit**
 
 Thread Exit clears the allocated memory, resources, and closes open files on the thread and then finally kills the thread when called.
+
 ```
 int thread_exit(void)
 {
@@ -149,7 +155,8 @@ int thread_exit(void)
 
 **thread_test**
 
-This is the test function to check the execution of above written code 
+This is the test function to check the execution of above written code
+
 ```
 #include "types.h"
 #include "stat.h"
@@ -211,25 +218,25 @@ int main(int argc, char *argv[])
 ```
 
 **output**
-
 Insert output ss link
-
 
 ## Part 2: Synchronization
 
 ### Spinlock
 
-
 ### proc.c system_calls
 
 **thread_spinlock_init**
+
 ```
 void thread_spinlock_init(struct spinlock *lk)
 {
     initlock(lk, "tlock");
 }
 ```
+
 **thread_spin_lock**
+
 ```
 void thread_spin_lock(struct spinlock *lk)
 {
@@ -253,7 +260,9 @@ void thread_spin_lock(struct spinlock *lk)
 
 }
 ```
+
 **thread_spin_unlock**
+
 ```
 
 void thread_spin_unlock(struct spinlock *lk)
@@ -360,6 +369,10 @@ struct mutexlock{
 ```
 
 ### mutex.c
+We have implemented three functions 
+i) thread_mutex_init : initializes the mutex lock to unlocked state
+ii) thread_mutex_lock : locks the mutex for the thread that first requests it
+iii) thread_mutex_unlock : unlocks the mutex when a thread is done with critical section exectuion 
 
 ```
 #include "types.h"
