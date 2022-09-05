@@ -1,5 +1,16 @@
 # ASSIGNMENT 1
-# 
+
+
+### Group: M24
+
+### Team members: 
+
+Somya Khandelwal(200123056)
+
+Pranav Agarwal(200123040)
+
+Yashvi Chirag Panchal(200123073)
+
 
 ## Part 1: Kernel threads
 
@@ -218,7 +229,8 @@ int main(int argc, char *argv[])
 ```
 
 **output**
-Insert output ss link
+
+![test output](https://i.ibb.co/N1sk2Cj/Whats-App-Image-2022-09-05-at-9-16-43-PM.jpg)
 
 ## Part 2: Synchronization
 
@@ -355,6 +367,10 @@ int main(int argc, char *argv[])
 }
 ```
 
+**output**
+
+![spinlock test](https://i.ibb.co/n7PWhjh/Whats-App-Image-2022-09-05-at-9-16-43-PM-1.jpg)
+
 ### Mutex
 
 ### mutex.h
@@ -475,3 +491,7 @@ int main(int argc, char *argv[])
     exit();
 }
 ```
+
+**output**
+
+![mutex test](https://i.ibb.co/LhStVHr/Whats-App-Image-2022-09-05-at-9-16-43-PM-2.jpg)
