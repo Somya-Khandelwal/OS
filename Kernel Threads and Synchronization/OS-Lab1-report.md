@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
 **output**
 
 ![test output](https://i.ibb.co/N1sk2Cj/Whats-App-Image-2022-09-05-at-9-16-43-PM.jpg)
-Here we get an output value of 3275 , which clearly is not same as the correct answer, i.e., 6000. This happens due to simultaneous access and changing of the shared variable by both threads. This leads to wrong values being read and updated by the threads.
+Here we get an output value of 3275 , which clearly is not same as the correct answer, i.e., 6000. This happens due to simultaneous access and changing of the shared variable by both threads. This leads to wrong values being read and updated various times.
 
 ## Part 2: Synchronization
 
