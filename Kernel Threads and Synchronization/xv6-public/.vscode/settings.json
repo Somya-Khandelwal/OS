@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.ejs": "html",
+        "stat.h": "c",
+        "param.h": "c",
+        "mmu.h": "c",
+        "proc.h": "c",
+        "defs.h": "c",
+        "user.h": "c",
+        "spinlock.h": "c",
+        "types.h": "c",
+        "date.h": "c",
+        "x86.h": "c",
+        "memlayout.h": "c",
+        "mutex.h": "c"
+    }
+}
