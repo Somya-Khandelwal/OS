@@ -1,22 +1,28 @@
-# ASSIGNMENT 1
+<div align="center">
 
+# ASSIGNMENT 1
 
 ### Group: M24
 
-### Team members: 
+### Team members:
 
-Somya Khandelwal(200123056)
+<p>
 
-Pranav Agarwal(200123040)
+#### Somya Khandelwal - 200123056
 
-Yashvi Chirag Panchal(200123073)
+#### Pranav Agarwal - 200123040
 
+#### Yashvi Chirag Panchal - 200123073
+
+</p>
+</div>
 
 ## Part 1: Kernel threads
 
 **thread_create**
 
 This creates a new process as a copy of the current process, but we can distinguish it as a thread by the parent property of "proc" which will store the parent of the thread and also the threads will share the same Page Directory with their parents.
+The new process is passed function pointer and stack as parameters and will use 0xffffffff as a fake return address for termination
 
 ```
 int thread_create(void (_fcn)(void _), void *arg, void *stack)
@@ -63,9 +69,9 @@ struct proc *curproc = myproc();
 }
 ```
 
-Thread Join blocks the execution of parent thread until the child thread has completed it's execution
-
 **thread_join**
+
+Thread Join blocks the execution of parent thread until the child thread has completed it's execution
 
 ```
 int thread_join(void)
@@ -231,14 +237,20 @@ int main(int argc, char *argv[])
 **output**
 
 ![test output](https://i.ibb.co/N1sk2Cj/Whats-App-Image-2022-09-05-at-9-16-43-PM.jpg)
+Here we get an output value of 3275 , which clearly is not same as the correct answer, i.e., 6000. This happens due to simultaneous access and changing of the shared variable by both threads. This leads to wrong values being read and updated by the threads.
 
 ## Part 2: Synchronization
 
+To solve the problem of race, we have to synchronize both the threads so that only one of them is able to access the shared variable at a time and hence, we do not get inconsistent results
+
 ### Spinlock
+
+The spinlock data structure in XV6 has been used to implement spin_locks for the synchronization purpose. It checks for the mutex lock to get free in an infinite loop (hence the name spin), for all the threads accessing the same shared resource ("total_balance" in this case).
 
 ### proc.c system_calls
 
 **thread_spinlock_init**
+The initialization system call for the spinlock
 
 ```
 void thread_spinlock_init(struct spinlock *lk)
@@ -248,6 +260,7 @@ void thread_spinlock_init(struct spinlock *lk)
 ```
 
 **thread_spin_lock**
+This function tries to acquire and lock the shared variable for one thread and hence stops the other thread from access at the same time by sending it in an infite spin.
 
 ```
 void thread_spin_lock(struct spinlock *lk)
@@ -256,13 +269,14 @@ void thread_spin_lock(struct spinlock *lk)
     // while(holding(lk));
     // lk->locked = 1;
 
-    // Using the above commented code was resulting in problems
-    // due to lack of atomicity
-    // This resulted in very long busy waits
+    /* Using the above commented code was resulting in problems
+     due to lack of atomicity
+     This resulted in very long busy waits
+    */
 
     // acquire(lk);
 
-    // Ask the reason why acquire and release is not working
+    /* Inbuilt acquire and release functions also do not work  */
 
     while (xchg(&lk->locked, 1))
         ;
@@ -274,6 +288,7 @@ void thread_spin_lock(struct spinlock *lk)
 ```
 
 **thread_spin_unlock**
+Unlock function opens the shared variable for access to other threads once the executing thread has completed its execution
 
 ```
 
@@ -291,6 +306,7 @@ void thread_spin_unlock(struct spinlock *lk)
 ```
 
 **thread_test_spinlock**
+This is the test code for synchronised balance calculation using spinlocks
 
 ```
 #include "types.h"
@@ -370,10 +386,15 @@ int main(int argc, char *argv[])
 **output**
 
 ![spinlock test](https://i.ibb.co/n7PWhjh/Whats-App-Image-2022-09-05-at-9-16-43-PM-1.jpg)
+Here we see the final output is 6000, which is consistent with our observations
 
 ### Mutex
 
-### mutex.h
+Mutex lock sends the thread which is unable to acquire the shared variable or resouce to sleep for a fixed amount of time instead of spinning it in an infinite loop. This helps to lower the number of context switches and also fastens the average execution time.
+
+#### mutex.h
+
+This is a simple mutex data structure
 
 ```
 #include "types.h"
@@ -384,11 +405,12 @@ struct mutexlock{
 };
 ```
 
-### mutex.c
-We have implemented three functions 
+#### mutex.c
+
+We have implemented three functions
 i) thread_mutex_init : initializes the mutex lock to unlocked state
 ii) thread_mutex_lock : locks the mutex for the thread that first requests it
-iii) thread_mutex_unlock : unlocks the mutex when a thread is done with critical section exectuion 
+iii) thread_mutex_unlock : unlocks the mutex when a thread is done with critical section exectuion
 
 ```
 #include "types.h"
@@ -417,7 +439,9 @@ void thread_mutex_unlock(struct mutexlock *lk)
 }
 ```
 
-### thread_test_mutex
+#### thread_test_mutex
+
+The test function implemented using mutex locks
 
 ```
 #include "types.h"
@@ -495,3 +519,15 @@ int main(int argc, char *argv[])
 **output**
 
 ![mutex test](https://i.ibb.co/LhStVHr/Whats-App-Image-2022-09-05-at-9-16-43-PM-2.jpg)
+Here too, we see that by using process synchronization we get result as 6000, which is consistent with our observations.
+
+### Changes made to xv6 to achieve the above functionality
+
+-   Makefile : The makefile was edited to generate the new function call files at the time of OS loading.
+-   defs.h : This is the common header file. Function calls to thread tests, thread_create, thread_join and thread_exit were declared here.
+-   sysproc.c : The system calls sys_thread_test, sys_thread_create, sys_thread_join and sys_thread_exit were declared in this file.
+-   proc.c : This was the main file for implementing all functions including system calls, spinlock and mutex functionalities.
+-   usys.S : The system calls were initialized here in assembly
+-   mutex.h : Here, we created the data structure for mutex locks
+-   mutex.c : Here, we added all the required functionality to mutex locks
+-   user.h : This file stores the declarations for function calls to be used in system calls. We declated thread_create(), thread_join(), thread_exit(), thread_test(), thread_test_spinlock(), thread_test_mutex(), thread_spinlock_init(), thread_spin_lock(), thread_spin_unlock() functions in this file.
