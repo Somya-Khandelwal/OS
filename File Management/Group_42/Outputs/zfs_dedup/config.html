@@ -1,0 +1,176 @@
+<title>Vdbench output/config.html</title><pre>
+Output from script /home/pranav/Downloads/Submission/vdbench/linux/config.sh: 
+
+Monday 14 November 2022 09:00:46 PM IST
+>>>>>uname -a
+Linux kali 5.19.0-kali2-amd64 #1 SMP PREEMPT_DYNAMIC Debian 5.19.11-1kali2 (2022-10-10) x86_64 GNU/Linux
+Monday 14 November 2022 09:00:46 PM IST
+>>>>>ifconfig -a
+docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.18.0.1  netmask 255.255.0.0  broadcast 172.18.255.255
+        ether 02:42:84:ce:c4:a4  txqueuelen 0  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 08:97:98:be:2c:de  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 55725  bytes 5065881 (4.8 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 55725  bytes 5065881 (4.8 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lxcbr0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 10.0.3.1  netmask 255.255.255.0  broadcast 10.0.3.255
+        ether 00:16:3e:00:00:00  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.150.32.55  netmask 255.255.240.0  broadcast 10.150.47.255
+        inet6 fe80::42aa:f8bb:2251:daad  prefixlen 64  scopeid 0x20<link>
+        ether f8:ac:65:fd:6f:bf  txqueuelen 1000  (Ethernet)
+        RX packets 2996236  bytes 351692679 (335.4 MiB)
+        RX errors 0  dropped 107  overruns 0  frame 0
+        TX packets 44245  bytes 40206855 (38.3 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+Monday 14 November 2022 09:00:46 PM IST
+>>>>>id
+uid=0(root) gid=0(root) groups=0(root)
+Monday 14 November 2022 09:00:46 PM IST
+>>>>>mount
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+udev on /dev type devtmpfs (rw,nosuid,relatime,size=8070948k,nr_inodes=2017737,mode=755,inode64)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,noexec,relatime,size=1621580k,mode=755,inode64)
+/dev/nvme0n1p6 on / type ext4 (rw,relatime,errors=remount-ro)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,inode64)
+tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k,inode64)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,relatime)
+bpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=29,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=20118)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
+fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+ramfs on /run/credentials/systemd-sysctl.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
+ramfs on /run/credentials/systemd-sysusers.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
+ramfs on /run/credentials/systemd-tmpfiles-setup-dev.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
+/var/lib/snapd/snaps/bare_5.snap on /snap/bare/5 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/core18_2620.snap on /snap/core18/2620 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/code_113.snap on /snap/code/113 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/core_13886.snap on /snap/core/13886 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/core18_2566.snap on /snap/core18/2566 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/code_112.snap on /snap/code/112 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/core22_275.snap on /snap/core22/275 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/core22_310.snap on /snap/core22/310 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/gnome-3-28-1804_161.snap on /snap/gnome-3-28-1804/161 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/gtk-common-themes_1535.snap on /snap/gtk-common-themes/1535 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snapd_17029.snap on /snap/snapd/17029 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snapd_17336.snap on /snap/snapd/17336 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/spotify_60.snap on /snap/spotify/60 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/telegram-desktop_4256.snap on /snap/telegram-desktop/4256 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/telegram-desktop_4312.snap on /snap/telegram-desktop/4312 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/vlc_2344.snap on /snap/vlc/2344 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/vlc_3078.snap on /snap/vlc/3078 type squashfs (ro,nodev,relatime,errors=continue,x-gdu.hide,x-gvfs-hide)
+/dev/nvme0n1p1 on /boot/efi type vfat (rw,relatime,fmask=0077,dmask=0077,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro)
+ramfs on /run/credentials/systemd-tmpfiles-setup.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
+binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,nosuid,nodev,noexec,relatime)
+sunrpc on /run/rpc_pipefs type rpc_pipefs (rw,relatime)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=1621576k,nr_inodes=405394,mode=700,uid=1000,gid=1000,inode64)
+gvfsd-fuse on /run/user/1000/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+portal on /run/user/1000/doc type fuse.portal (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+/dev/sda4 on /mnt/sda4 type ext4 (rw,relatime)
+/dev/sda6 on /media/pranav/ext4_part type ext4 (rw,nosuid,nodev,relatime,errors=remount-ro,uhelper=udisks2)
+zfs_pool on /zfs_pool type zfs (rw,xattr,noacl)
+/dev/nvme0n1p3 on /media/pranav/Acer type fuseblk (rw,nosuid,nodev,relatime,user_id=0,group_id=0,default_permissions,allow_other,blksize=4096,uhelper=udisks2)
+Monday 14 November 2022 09:00:46 PM IST
+>>>>>memory
+MemTotal:       16215796 kB
+MemFree:         1992868 kB
+MemAvailable:    8179908 kB
+Buffers:          344184 kB
+Cached:          6833560 kB
+SwapCached:            0 kB
+Active:          2195192 kB
+Inactive:        9173472 kB
+Active(anon):       8728 kB
+Inactive(anon):  5279708 kB
+Active(file):    2186464 kB
+Inactive(file):  3893764 kB
+Unevictable:      757516 kB
+Mlocked:             168 kB
+SwapTotal:       1952764 kB
+SwapFree:        1952764 kB
+Zswap:                 0 kB
+Zswapped:              0 kB
+Dirty:               256 kB
+Writeback:             0 kB
+AnonPages:       4804304 kB
+Mapped:           995784 kB
+Shmem:           1107628 kB
+KReclaimable:     446448 kB
+Slab:             685496 kB
+SReclaimable:     446448 kB
+SUnreclaim:       239048 kB
+KernelStack:       30648 kB
+PageTables:        60368 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    10060660 kB
+Committed_AS:   15774592 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:      344716 kB
+VmallocChunk:          0 kB
+Percpu:            21248 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:   1335296 kB
+ShmemHugePages:   692224 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:      486844 kB
+DirectMap2M:    15069184 kB
+DirectMap1G:     2097152 kB
+               total        used        free      shared  buff/cache   available
+Mem:        16215796     6598736     1992868     1107628     7624192     8179908
+Low:        16215796    14222928     1992868
+High:              0           0           0
+Swap:        1952764           0     1952764
+Monday 14 November 2022 09:00:46 PM IST
+>>>>>ps -ef | grep -i vdb
+root      116473  116036  1 21:00 pts/0    00:00:00 sudo ./vdbench -f workload1 anchor=/zfs_pool
+root      116474  116473  0 21:00 pts/3    00:00:00 sudo ./vdbench -f workload1 anchor=/zfs_pool
+root      116475  116474  0 21:00 pts/3    00:00:00 /bin/bash ./vdbench -f workload1 anchor=/zfs_pool
+root      116477  116475 99 21:00 pts/3    00:00:01 java -client -Xmx512m -Xms64m -cp ./:./classes:./vdbench.jar Vdb.Vdbmain -f workload1 anchor=/zfs_pool
+root      116505  116477  0 21:00 pts/3    00:00:00 /bin/bash /home/pranav/Downloads/Submission/vdbench/vdbench SlaveJvm -m localhost -n localhost-10-221114-21.00.45.852 -l localhost-0 -p 5570
+root      116509  116505  0 21:00 pts/3    00:00:00 java -client -Xmx1024m -Xms128m -cp /home/pranav/Downloads/Submission/vdbench/:/home/pranav/Downloads/Submission/vdbench/classes:/home/pranav/Downloads/Submission/vdbench/vdbench.jar Vdb.SlaveJvm SlaveJvm -m localhost -n localhost-10-221114-21.00.45.852 -l localhost-0 -p 5570
+root      116542  116477  0 21:00 pts/3    00:00:00 /bin/bash /home/pranav/Downloads/Submission/vdbench/linux/config.sh -o /home/pranav/Downloads/Submission/vdbench/output localhost
+root      116558  116542  0 21:00 pts/3    00:00:00 grep -i vdb
+

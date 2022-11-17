@@ -1,0 +1,155 @@
+<title>Vdbench output/localhost-0.stdout.html</title><pre>
+stdout/stderr for slave=localhost-0
+
+21:04:54.819 21:04:54.819 SlaveJvm execution parameter:  '-m localhost'
+21:04:54.820 21:04:54.819 SlaveJvm execution parameter:  '-n localhost-10-221114-21.04.54.588'
+21:04:54.820 21:04:54.819 SlaveJvm execution parameter:  '-l localhost-0'
+21:04:54.820 21:04:54.819 SlaveJvm execution parameter:  '-p 5570'
+21:04:54.820 21:04:54.819 SlaveJvm positional parameter: 'SlaveJvm'
+21:04:54.855 21:04:54.854 successfully connected to master localhost
+21:04:54.855 21:04:54.855 Connection to localhost using port 5570 successful
+21:04:54.984 21:04:54.984 ticks_per_second: 100
+21:04:55.006 21:04:55.006 execute(): ls -l /media/pranav/ext4_part
+21:04:55.014 21:04:55.014 Configuration interpretation took 0.03 seconds
+
+Link to Run Definitions:         <A HREF="#_766572210">format_for_rd1 For loops: None</A>
+                                 <A HREF="#_1020391880">rd1 For loops: None</A>
+
+21:04:55.156 21:04:55.156 Beginning of run setup
+21:04:55.156 21:04:55.156 **********************
+21:04:55.156 
+21:04:55.156 
+21:04:55.252 21:04:55.252 Deleting old file structure.
+21:04:55.253 21:04:55.253 Starting initializeFileAnchor for rd=format_for_rd1 For loops: None anchor=fsd1
+21:04:55.255 21:04:55.255 Completed the creation of the directory list for /media/pranav/ext4_part: 12 directories.
+21:04:55.256 21:04:55.256 Generated 450 file names; total anchor size: 450m (471,859,200)
+21:04:55.258 21:04:55.258 Created flipflop bitmap for fsd1. 1 bitmaps for a total of 452 bits.
+21:04:55.258 21:04:55.258 Creating bitmap for unique blocks for fsd=fsd1. 1 bitmaps for a total of 450 bits, identifying 202 unique blocks
+21:04:55.259 21:04:55.259 Writing control file for anchor=/media/pranav/ext4_part at start of run.
+21:04:55.273 21:04:55.273 Completed control file for anchor=/media/pranav/ext4_part at start of run.  dirs: 12/0 files: 450/0 sizes: 450m/0/0/0
+21:04:55.280 21:04:55.280 Completed initializeFileAnchor for fsd1: 0.03
+21:04:55.303 21:04:55.303 Started 8 threads for fwd=format,fsd=fsd1
+21:04:55.303 21:04:55.303 Started 8 FwgThreads for rd=format_for_rd1 For loops: None
+21:04:55.303 21:04:55.303 Waiting for task synchronization
+21:04:55.304 21:04:55.303 Requesting full garbage collection
+21:04:55.305 21:04:55.304 GcTracker: cum:   1 intv:  1 ms:       2 mss:  0.00% Heap_MB max:  1024 curr:   130 used:    24 free:   106 
+21:04:55.312 21:04:55.312 GcTracker: cum:   2 intv:  1 ms:       6 mss:  0.00% Heap_MB max:  1024 curr:   128 used:    23 free:   105 
+21:04:55.313 21:04:55.312 task_wait_start_complete() end
+
+<a name="_766572210"></a><i><b>21:04:56.003 Starting RD=format_for_rd1</b></i>
+
+21:04:56.008 21:04:56.007 task_run_all(): 9 tasks
+21:04:56.292 21:04:56.291 Erasing Data Validation map: fsd1
+21:04:56.304 21:04:56.303 Message to master: anchor=/media/pranav/ext4_part mkdir complete.
+21:04:56.759 21:04:56.759 Message to master: anchor=/media/pranav/ext4_part create complete.
+21:04:56.864 21:04:56.864 
+21:04:56.865 21:04:56.864 Miscellaneous statistics:
+21:04:56.865 21:04:56.864 FILE_CREATES        Files created:                                  450
+21:04:56.865 21:04:56.865 DIRECTORY_CREATES   Directories created:                             12
+21:04:56.866 21:04:56.865 WRITE_OPENS         Files opened for write activity:                450
+21:04:56.866 21:04:56.866 DIR_EXISTS          Directory may not exist (yet):                    6
+21:04:56.866 21:04:56.866 FILE_CLOSES         Close requests:                                 450
+21:04:56.867 21:04:56.866 
+21:04:56.869 21:04:56.868 Dedup counters. Bytes written: 3.516g across: 1.578g (44.9%) on_sd: 0 (0.0%) dups: 1.938g (55.1%) resulting dedup=49.9% (2.00:1)
+21:04:56.873 21:04:56.872 Dedup options: 
+21:04:56.873 dedup_type:                            1
+21:04:56.873 dedup_ratio:                        2.00
+21:04:56.873 dedup_unit:                    1,048,576
+21:04:56.874 flipflop:                             no
+21:04:56.874 hot_dedup_sets:                        0
+21:04:56.874 hot_dedup_blocks:                      0
+21:04:56.875 dedup_sets_reqd:                      5%
+21:04:56.875 dedup_sets_used:                      22
+21:04:56.875 
+21:04:56.875 unique_blocks:                       202
+21:04:56.876 duplicate_blocks:                    248 (including 22 originals)
+21:04:56.876 dedup_pct:                         50.00
+21:04:56.876 dedup_adjusted:                    45.00
+21:04:56.876 total_size:                         450m
+21:04:56.877 unit_blocks:                         450
+21:04:56.877 
+21:04:56.877 Info only reliable if xfersize is multiple of dedupunit:
+21:04:56.877 uniques_written:                   1,616; expected 202; delta 1,414 
+21:04:56.877 duplicates_written:                1,984; expected 248; delta 1,736 
+21:04:56.877 Total writes:                      3,600; delta 3,150
+21:04:56.877 flipflops:                             0
+21:04:56.877 
+21:04:56.877 Dsim counts: Hash size:              224 (202 uniques + 22 sets)
+21:04:56.877 Dsim counts: Duplicates:             226
+21:04:56.877 Dsim counts: Ratio:                 2.01 (2.00893)
+21:04:56.878 
+21:04:56.878 21:04:56.873 Java Heap in MB. max: 1024.000; current:  128.000; used:   29.244; free:   98.756
+21:04:56.878 21:04:56.873 Maximum native memory allocation:   16,777,216; Current allocation:   16,777,216
+21:04:57.298 21:04:57.298 Writing control file for anchor=/media/pranav/ext4_part at end of run.
+21:04:57.313 21:04:57.312 Completed control file for anchor=/media/pranav/ext4_part at end of run.  dirs: 12/12 files: 450/450 sizes: 450m/450m/450/450m
+21:04:57.314 21:04:57.314 End of run
+21:04:57.314 21:04:57.314 **********
+21:04:57.315 
+21:04:57.315 
+21:04:57.416 21:04:57.416 Beginning of run setup
+21:04:57.417 21:04:57.416 **********************
+21:04:57.417 
+21:04:57.417 
+21:04:57.488 21:04:57.488 Starting initializeFileAnchor for rd=rd1 For loops: None anchor=fsd1
+21:04:57.489 21:04:57.488 Reading control file for anchor=/media/pranav/ext4_part
+21:04:57.489 21:04:57.489 Completed reading control file.
+21:04:57.489 21:04:57.489 Completed the creation of the directory list for /media/pranav/ext4_part: 12 directories.
+21:04:57.490 21:04:57.490 Generated 450 file names; total anchor size: 450m (471,859,200)
+21:04:57.490 21:04:57.490 No deletes and creates. Control file not cleared.
+21:04:57.490 21:04:57.490 During anchor creation for anchor=/media/pranav/ext4_part there were 12 directories and 450 files
+21:04:57.490 21:04:57.490 Completed initializeFileAnchor for fsd1: 0.00
+21:04:57.491 21:04:57.491 Started 2 threads for fwd=fwd1,fsd=fsd1,operation=read
+21:04:57.491 21:04:57.491 Started 2 FwgThreads for rd=rd1 For loops: None
+21:04:57.491 21:04:57.491 Waiting for task synchronization
+21:04:57.491 21:04:57.491 Requesting full garbage collection
+21:04:57.492 21:04:57.491 GcTracker: cum:   2 intv:  0 ms:       0 mss:  0.00% Heap_MB max:  1024 curr:   128 used:    36 free:    92 
+21:04:57.499 21:04:57.499 GcTracker: cum:   3 intv:  1 ms:       7 mss:  0.00% Heap_MB max:  1024 curr:   128 used:    23 free:   105 
+21:04:57.499 21:04:57.499 task_wait_start_complete() end
+
+<a name="_1020391880"></a><i><b>21:04:58.001 Starting RD=rd1; elapsed=30; fwdrate=max. For loops: None</b></i>
+
+21:04:58.005 21:04:58.005 task_run_all(): 3 tasks
+21:05:28.162 21:05:28.161 
+21:05:28.162 21:05:28.162 Miscellaneous statistics:
+21:05:28.162 21:05:28.162 READ_OPENS          Files opened for read activity:             156,843
+21:05:28.163 21:05:28.162 FILE_BUSY           File busy:                                      364
+21:05:28.163 21:05:28.162 FILE_CLOSES         Close requests:                             156,843
+21:05:28.163 21:05:28.163 
+21:05:28.163 21:05:28.163 Dedup counters. Bytes written: 0 across: 0 (NaN%) on_sd: 0 (NaN%) dups: 0 (NaN%) resulting dedup=NaN% (NaN:1)
+21:05:28.166 21:05:28.165 Dedup options: 
+21:05:28.166 dedup_type:                            1
+21:05:28.166 dedup_ratio:                        2.00
+21:05:28.166 dedup_unit:                    1,048,576
+21:05:28.166 flipflop:                             no
+21:05:28.166 hot_dedup_sets:                        0
+21:05:28.166 hot_dedup_blocks:                      0
+21:05:28.166 dedup_sets_reqd:                      5%
+21:05:28.166 dedup_sets_used:                      22
+21:05:28.166 
+21:05:28.166 unique_blocks:                       202
+21:05:28.166 duplicate_blocks:                    248 (including 22 originals)
+21:05:28.166 dedup_pct:                         50.00
+21:05:28.166 dedup_adjusted:                    45.00
+21:05:28.167 total_size:                         450m
+21:05:28.167 unit_blocks:                         450
+21:05:28.167 
+21:05:28.167 Info only reliable if xfersize is multiple of dedupunit:
+21:05:28.167 uniques_written:                       0; expected 202; delta -202 
+21:05:28.167 duplicates_written:                    0; expected 248; delta -248 
+21:05:28.167 Total writes:                          0; delta -450
+21:05:28.167 flipflops:                             0
+21:05:28.167 
+21:05:28.167 Dsim counts: Hash size:              224 (202 uniques + 22 sets)
+21:05:28.167 Dsim counts: Duplicates:             226
+21:05:28.168 Dsim counts: Ratio:                 2.01 (2.00893)
+21:05:28.168 
+21:05:28.168 21:05:28.166 Java Heap in MB. max: 1024.000; current:  128.000; used:   24.615; free:  103.385
+21:05:28.168 21:05:28.166 Maximum native memory allocation:   20,971,520; Current allocation:    4,194,304
+21:05:28.168 21:05:28.167 Writing control file for anchor=/media/pranav/ext4_part at end of run.
+21:05:28.177 21:05:28.177 Completed control file for anchor=/media/pranav/ext4_part at end of run.  dirs: 12/12 files: 450/450 sizes: 450m/450m/450/450m
+21:05:28.178 21:05:28.178 End of run
+21:05:28.178 21:05:28.178 **********
+21:05:28.178 
+21:05:28.178 
+21:05:29.079 21:05:29.079 Master is requesting slave shutdown
+21:05:29.080 21:05:29.079 Java Heap in MB. max: 1024.000; current:  128.000; used:   26.351; free:  101.649
